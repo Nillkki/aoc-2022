@@ -10,38 +10,22 @@ fun main() {
         return c.code - LOWER_CASE_DIFF
     }
 
-
     fun part1(input: List<String>): Int {
-        var sum = 0
-
-        for (i in input) {
-            var charsInBoth = ""
-            val firstHalf = i.slice(IntRange(0, i.length / 2 - 1))
-            val secondHalf = i.slice(IntRange(i.length / 2, i.length - 1))
-            for (c in firstHalf) {
-                if (secondHalf.contains(c) && !charsInBoth.contains(c)) {
-                    charsInBoth += c
-                }
+        return input.sumOf { s ->
+            val halves = s.splitInHalf().toList()
+            halves.reappearingChars().sumOf {
+                getPriorityValue(it)
             }
-            sum += charsInBoth.map { getPriorityValue(it) }.sum()
         }
-        return sum
     }
 
     fun part2(input: List<String>): Int {
-        var sum = 0
-
+        // Split elves into groups of three
         val groups = input.chunked(3)
-        for (g in groups) {
-            for (c in g[0]) {
-                if (g[1].contains(c) && g[2].contains(c)) {
-                    sum += getPriorityValue(c)
-                    break
-                }
-            }
-        }
 
-        return sum
+        return groups.sumOf { group ->
+            group.reappearingChars().sumOf { getPriorityValue(it) }
+        }
     }
 
     // test if implementation meets criteria from the description, like:
