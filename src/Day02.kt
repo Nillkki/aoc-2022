@@ -1,119 +1,60 @@
 fun main() {
     fun part1(input: List<String>): Int {
-        var score = 0
-        for (i in input) {
-            val opponentsMove = i[0]
-            val chosenMove = i[2]
-            // A (Rock) is beaten by Y (Paper)
-            // B (Paper) is beaten by Z (Scissors)
-            // C (Scissors) is beaten by X (Rock)
-            when (opponentsMove) {
-                'A' -> {
-                    if (chosenMove == 'Y') {
-                        // Win
-                        score += 6
-                    } else if (chosenMove == 'X') {
-                        // Draw
-                        score += 3
-                    }
-                }
-
-                'B' -> {
-                    if (chosenMove == 'Z') {
-                        // Win
-                        score += 6
-                    } else if (chosenMove == 'Y') {
-                        // Draw
-                        score += 3
-                    }
-                }
-
-                'C' -> {
-                    if (chosenMove == 'X') {
-                        // Win
-                        score += 6
-                    } else if (chosenMove == 'Z') {
-                        // Draw
-                        score += 3
-                    }
-                }
-
-                else -> {
-                    error("Unknown input for opponent")
-                }
-            }
-            score += when (chosenMove) {
-                'X' -> 1
-                'Y' -> 2
-                'Z' -> 3
-                else -> {
-                    error("Unknown input for opponent")
-                }
+        fun scoreChosenMove(chosenMove: Char) = when (chosenMove) {
+            'X' -> 1
+            'Y' -> 2
+            'Z' -> 3
+            else -> {
+                error("Unknown chosen move")
             }
         }
-        return score
+
+        fun scoreMovePair(movePair: Pair<Char, Char>) = when (movePair) {
+            'A' to 'Y', 'B' to 'Z', 'C' to 'X' -> 6 // Win
+            'A' to 'X', 'B' to 'Y', 'C' to 'Z' -> 3 // Draw
+            'A' to 'Z', 'B' to 'X', 'C' to 'Y' -> 0
+
+            else -> {
+                error("Unknown move pair")
+            }
+        }
+
+        return input.sumOf { line ->
+            val opponentsMove = line[0]
+            val chosenMove = line[2]
+            scoreChosenMove(chosenMove) + scoreMovePair(opponentsMove to chosenMove)
+        }
     }
-
+    
     fun part2(input: List<String>): Int {
-        var score = 0
-        fun getLosingMove(opponentsMove: Char) = when (opponentsMove) {
-            'A' -> 'C' // A (Rock) beats C (Scissors)
-            'B' -> 'A' // B (Paper) beats A (Rock)
-            'C' -> 'B' // C (Scissors) beats B (Paper)
+        fun scoreChosenMove(
+            endResult: Char,
+            opponentsMove: Char,
+        ): Int = when (opponentsMove to endResult) {
+            'B' to 'X', 'A' to 'Y', 'C' to 'Z' -> 1
+            'C' to 'X', 'B' to 'Y', 'A' to 'Z' -> 2
+            'A' to 'X', 'C' to 'Y', 'B' to 'Z' -> 3
+
             else -> {
-                error("Unknown move for opponent when getting losing move")
+                error("Unknown input")
             }
         }
 
-        fun getDrawingMove(opponentsMove: Char) = when (opponentsMove) {
-            'A' -> 'A'
-            'B' -> 'B'
-            'C' -> 'C'
+        fun scoreResult(endResult: Char) = when (endResult) {
+            'X' -> 0
+            'Y' -> 3 // Draw
+            'Z' -> 6 // Win
+
             else -> {
-                error("Unknown move for opponent when getting drawing move")
+                error("Unknown endResult")
             }
         }
 
-        fun getWinningMove(opponentsMove: Char) = when (opponentsMove) {
-            'A' -> 'B' // B (Paper) beats A (Rock)
-            'B' -> 'C' // C (Scissors) beats B (Paper)
-            'C' -> 'A' // A (Rock) beats C (Scissors)
-            else -> {
-                error("Unknown move for opponent when getting winning move")
-            }
+        return input.sumOf { line ->
+            val opponentsMove = line[0]
+            val endResult = line[2]
+            scoreChosenMove(endResult, opponentsMove) + scoreResult(endResult)
         }
-
-        for (i in input) {
-            val opponentsMove = i[0]
-            val chosenMove = when (i[2]) {
-                // Lose
-                'X' -> {
-                    getLosingMove(opponentsMove)
-                }
-                // Draw
-                'Y' -> {
-                    score += 3
-                    getDrawingMove(opponentsMove)
-                }
-                // Win
-                'Z' -> {
-                    score += 6
-                    getWinningMove(opponentsMove)
-                }
-                else -> {
-                    error("Unknown input")
-                }
-            }
-            score += when (chosenMove) {
-                'A' -> 1
-                'B' -> 2
-                'C' -> 3
-                else -> {
-                    error("Unknown move chosen")
-                }
-            }
-        }
-        return score
     }
 
     // test if implementation meets criteria from the description, like:
