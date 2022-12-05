@@ -1,18 +1,19 @@
 fun main() {
+    fun toRange(section: String): IntRange {
+        val ids = section.split('-')
+        return IntRange(ids.first().toInt(), ids.last().toInt())
+    }
+
     fun part1(input: List<String>): Int {
         var sum = 0
 
-        fun getRange(elf: String): IntRange {
-            val digits = elf.split('-')
-            return IntRange(digits.first().toInt(), digits.last().toInt())
-        }
-
         for (i in input) {
             val pair = i.split(',')
-            val firstElfRange = getRange(pair.first())
-            val secondElfRange = getRange(pair.last())
+            val firstElf = toRange(pair.first())
+            val secondElf = toRange(pair.last())
 
-            if (firstElfRange.all { secondElfRange.contains(it) } || secondElfRange.all { firstElfRange.contains(it) }) {
+            if (firstElf.all { secondElf.contains(it) }
+                || secondElf.all { firstElf.contains(it) }) {
                 sum += 1
             }
         }
@@ -23,17 +24,12 @@ fun main() {
     fun part2(input: List<String>): Int {
         var sum = 0
 
-        fun getRange(elf: String): IntRange {
-            val digits = elf.split('-')
-            return IntRange(digits.first().toInt(), digits.last().toInt())
-        }
-
         for (i in input) {
             val pair = i.split(',')
-            val firstElfRange = getRange(pair.first())
-            val secondElfRange = getRange(pair.last())
+            val firstElf = toRange(pair.first())
+            val secondElf = toRange(pair.last())
 
-            if (firstElfRange.any { secondElfRange.contains(it) } || secondElfRange.any { firstElfRange.contains(it) }) {
+            if (firstElf.any { secondElf.contains(it) } || secondElf.any { firstElf.contains(it) }) {
                 sum += 1
             }
         }
