@@ -7,20 +7,18 @@ fun main() {
         return cargo to moves
     }
 
-    fun parseStacks(cargo: List<String>): MutableList<ArrayDeque<Char>> {
-        val stacks = mutableListOf<ArrayDeque<Char>>()
-
+    fun parseStacks(cargo: List<String>): Array<ArrayDeque<Char>> {
         val lines = cargo.reversed().iterator()
 
         // Build stacks first
         val firstLine = lines.next()
         val numberOfStacks = firstLine.split("   ").size
-        repeat(numberOfStacks) {
-            stacks.add(ArrayDeque())
+        val stacks = Array(numberOfStacks) {
+            ArrayDeque<Char>()
         }
 
-        for (line in lines) {
-            val columns = line.chunked(4)
+        lines.forEachRemaining {
+            val columns = it.chunked(4)
 
             columns.forEachIndexed { index, element ->
                 if (element.isNotBlank()) {
@@ -45,15 +43,13 @@ fun main() {
         val (cargo, moves) = parseParts(input)
         val stacks = parseStacks(cargo)
 
-        for (move in moves) {
-            if(move.isBlank()) {
-                continue
-            }
-
-            val (count, from, to) = parseMove(move)
-            repeat(count) {
-                val element = stacks[from-1].removeLast()
-                stacks[to-1].add(element)
+        moves.forEach {
+            if(it.isNotBlank()) {
+                val (count, from, to) = parseMove(it)
+                repeat(count) {
+                    val element = stacks[from-1].removeLast()
+                    stacks[to-1].add(element)
+                }
             }
         }
 
@@ -64,20 +60,17 @@ fun main() {
         val (cargo, moves) = parseParts(input)
         val stacks = parseStacks(cargo)
 
-        for (move in moves) {
-            if(move.isBlank()) {
-                continue
-            }
+        moves.forEach {
+            if(it.isNotBlank()) {
+                val (count, from, to) = parseMove(it)
 
-            val (count, from, to) = parseMove(move)
-
-            val crane = ArrayDeque<Char>()
-            repeat(count) {
-                val element = stacks[from-1].removeLast()
-                crane.addFirst(element)
-            }
-            crane.forEach {
-                stacks[to-1].add(it)
+                // Crane should keep order of moved items
+                val crane = ArrayDeque<Char>()
+                repeat(count) {
+                    val element = stacks[from-1].removeLast()
+                    crane.addFirst(element)
+                }
+                stacks[to-1].addAll(crane)
             }
         }
 
