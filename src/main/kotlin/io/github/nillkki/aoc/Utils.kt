@@ -25,8 +25,8 @@ fun String.md5() =
  * Return a Pair of string split in half.
  */
 fun String.splitInHalf(): Pair<String, String> {
-    val firstHalf = this.slice(IntRange(0, this.length / 2 - 1))
-    val secondHalf = this.slice(IntRange(this.length / 2, this.length - 1))
+    val firstHalf = this.substring(IntRange(0, this.length / 2 - 1))
+    val secondHalf = this.substring(IntRange(this.length / 2, this.length - 1))
     return firstHalf to secondHalf
 }
 
