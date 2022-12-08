@@ -1,15 +1,21 @@
 package io.github.nillkki.aoc
 
 import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.BenchmarkMode
 import org.openjdk.jmh.annotations.Measurement
+import org.openjdk.jmh.annotations.Mode
+import org.openjdk.jmh.annotations.OutputTimeUnit
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.Setup
 import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.annotations.Warmup
+import java.util.concurrent.TimeUnit
 
 @State(Scope.Benchmark)
-@Warmup(iterations = 1)
-@Measurement(iterations = 3)
+@Warmup(time = 500, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(time = 500, timeUnit = TimeUnit.MILLISECONDS)
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 class Day05 {
     companion object {
         fun parseParts(input: String): Pair<List<String>, List<String>> {
@@ -98,13 +104,13 @@ class Day05 {
     }
 
     @Benchmark
-    public fun part1Bench() {
-        part1(input)
+    public fun part1Bench(): String {
+        return part1(input)
     }
 
     @Benchmark
-    public fun part2Bench() {
-        part2(input)
+    public fun part2Bench(): String {
+        return part2(input)
     }
 }
 
