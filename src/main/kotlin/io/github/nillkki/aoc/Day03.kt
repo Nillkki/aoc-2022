@@ -1,3 +1,5 @@
+package io.github.nillkki.aoc
+
 private const val UPPER_CASE_DIFF = 38
 
 private const val LOWER_CASE_DIFF = 96

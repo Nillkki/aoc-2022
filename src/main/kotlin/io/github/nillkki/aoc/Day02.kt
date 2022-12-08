@@ -1,3 +1,5 @@
+package io.github.nillkki.aoc
+
 fun main() {
     fun part1(input: List<String>): Int {
         fun scoreChosenMove(chosenMove: Char) = when (chosenMove) {

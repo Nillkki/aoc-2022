@@ -1,3 +1,5 @@
+package io.github.nillkki.aoc
+
 fun main() {
     fun String.findEndOfNDistinctCharacters(n: Int): Int {
         var index = n - 1

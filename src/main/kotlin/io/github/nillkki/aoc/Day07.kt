@@ -1,3 +1,5 @@
+package io.github.nillkki.aoc
+
 import java.util.SortedSet
 
 fun main() {

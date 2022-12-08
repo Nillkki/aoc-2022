@@ -1,3 +1,5 @@
+package io.github.nillkki.aoc
+
 fun main() {
     fun toRange(section: String): IntRange {
         val ids = section.split('-')

@@ -1,3 +1,5 @@
+package io.github.nillkki.aoc
+
 fun main() {
 
     fun parseParts(input: String): Pair<List<String>, List<String>> {
