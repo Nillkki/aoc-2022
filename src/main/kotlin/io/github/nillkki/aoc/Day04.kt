@@ -13,18 +13,18 @@ import org.openjdk.jmh.annotations.Warmup
 class Day04 {
     companion object {
         fun toRange(section: String): IntRange {
-            val ids = section.split('-')
-            return IntRange(ids.first().toInt(), ids.last().toInt())
+            return IntRange(section.substringBefore('-').toInt(), section.substringAfter('-').toInt())
+        }
+
+        fun asRangePair(section: String): Pair<IntRange, IntRange> {
+            return toRange(section.substringBefore(',')) to toRange(section.substringAfter(','))
         }
 
         fun part1(input: List<String>): Int {
             var sum = 0
 
             for (i in input) {
-                val pair = i.split(',')
-                val firstElf = toRange(pair.first())
-                val secondElf = toRange(pair.last())
-
+                val (firstElf, secondElf) = asRangePair(i)
                 if (firstElf.all { secondElf.contains(it) }
                     || secondElf.all { firstElf.contains(it) }) {
                     sum += 1
@@ -38,9 +38,7 @@ class Day04 {
             var sum = 0
 
             for (i in input) {
-                val pair = i.split(',')
-                val firstElf = toRange(pair.first())
-                val secondElf = toRange(pair.last())
+                val (firstElf, secondElf) = asRangePair(i)
 
                 if (firstElf.any { secondElf.contains(it) } || secondElf.any { firstElf.contains(it) }) {
                     sum += 1
