@@ -12,27 +12,21 @@ import org.openjdk.jmh.annotations.Warmup
 import java.util.concurrent.TimeUnit
 
 @State(Scope.Benchmark)
-@Warmup(time = 500, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(time = 500, timeUnit = TimeUnit.MILLISECONDS)
+@Warmup(iterations = 1, time = 500, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 3, time = 500, timeUnit = TimeUnit.MILLISECONDS)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 class Day06 {
     companion object {
+        fun String.allUnique(): Boolean {
+            val s = hashSetOf<Char>()
+            return all { s.add(it) }
+        }
+
         fun String.findEndOfNDistinctCharacters(n: Int): Int {
-            var index = n - 1
-            while (index < this.length) {
-                val min = index - (n - 1)
-                val max = index
-                val marker = this.slice(min..max)
-
-                // Nice hack but not very efficient
-                if (marker.toCharArray().distinct().size == n) {
-                    return index + 1
-                }
-                index++
-            }
-
-            return -1
+            return this.windowedSequence(n).indexOfFirst {
+                it.allUnique()
+            } + n
         }
 
         fun part1(input: String): Int {
